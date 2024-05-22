@@ -1,17 +1,25 @@
-import { useEffect, useRef } from "react"
+import React, { useEffect, useRef } from "react"
 import { useGLTF, useAnimations } from "@react-three/drei"
+import { useCharacterAnimations } from "./CharacterAnimations.jsx"
 
 export default function Model(props) {
   const group = useRef()
+
   const { nodes, materials, animations } = useGLTF(
     "./models/combine_ani_01.glb"
   )
+
+  const { setAnimations, animationIndex } = useCharacterAnimations()
   const { actions, names } = useAnimations(animations, group)
-  console.log(names)
 
   useEffect(() => {
-    actions[names[2]].reset().fadeIn(0.5).play()
-  }, [])
+    setAnimations(names)
+  }, [names])
+
+  useEffect(() => {
+    actions[names[animationIndex]].reset().fadeIn(0.5).play()
+    return () => actions[names[animationIndex]].fadeOut(0.5)
+  }, [animationIndex])
 
   return (
     <group ref={group} {...props} dispose={null}>
