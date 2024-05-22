@@ -1,4 +1,4 @@
-import React, { useRef } from "react"
+import { useEffect, useRef } from "react"
 import { useGLTF, useAnimations } from "@react-three/drei"
 
 export default function Model(props) {
@@ -6,14 +6,20 @@ export default function Model(props) {
   const { nodes, materials, animations } = useGLTF(
     "./models/combine_ani_01.glb"
   )
-  const { actions } = useAnimations(animations, group)
+  const { actions, names } = useAnimations(animations, group)
+  console.log(names)
+
+  useEffect(() => {
+    actions[names[2]].reset().fadeIn(0.5).play()
+  }, [])
+
   return (
     <group ref={group} {...props} dispose={null}>
       <group name="Scene">
         <group
           name="Genesis2Male"
           position={[-0.042, -0.794, -0.1]}
-          rotation={[1.673, -0.017, 0.893]}
+          rotation={[1.673, -0.017, 0.493]}
           scale={0.01}
         >
           <group name="Armani_20393Shape">
